@@ -3,8 +3,9 @@ import streamlit.components.v1 as components
 import requests
 import base64
 
-# 1. RAW IMAGE URL (Fixed to point directly to the file data)
+# 1. RAW IMAGE URL
 RAW_IMAGE_URL = "https://githubusercontent.com"
+
 
 def get_base64_from_url(url):
     try:
@@ -15,13 +16,14 @@ def get_base64_from_url(url):
         return None
     return None
 
-# Convert the image to a string for guaranteed display
+
 img_b64 = get_base64_from_url(RAW_IMAGE_URL)
 
 # Emoji Unicode
 E_CHICK = "\U0001F423"
 E_TULIP = "\U0001F337"
 
+# We use f-string but DOUBLE the curly braces for CSS/JS
 HTML_CODE = f"""
 <!DOCTYPE html>
 <html>
@@ -31,7 +33,6 @@ HTML_CODE = f"""
     <style>
         body, html {{ height: 100vh; margin: 0; padding: 0; overflow: hidden; font-family: 'Georgia', serif; }}
         
-        /* Background Image - Outstanding Clarity */
         .bg-container {{
             position: fixed;
             top: 0; left: 0;
@@ -42,7 +43,6 @@ HTML_CODE = f"""
             z-index: -1;
         }}
         
-        /* Subtle card for readability */
         .card {{ 
             position: relative; 
             z-index: 20; 
@@ -79,7 +79,7 @@ HTML_CODE = f"""
             20% {{ opacity: 0.8; }} 
             80% {{ opacity: 0.8; }}
             to {{ transform: translateY(-20vh) rotate(360deg); opacity: 0; }} 
-        }
+        }}
     </style>
 </head>
 <body class="flex items-center justify-center">
@@ -133,4 +133,4 @@ st.markdown("""
 if img_b64:
     components.html(HTML_CODE, height=1000, scrolling=False)
 else:
-    st.error("Could not load the image from GitHub. Check the URL!")
+    st.error("Could not load image. Please check your GitHub link!")
