@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 
 # 1. PASTE YOUR IMAGE URL HERE
 # Make sure it starts with https://
-MY_IMAGE_URL = "https://unsplash.com"
+MY_IMAGE_URL = "https://github.com/okirorinnocent/easter/blob/main/school.jpg"
 
 # Emoji Unicode
 E_CHICK = "\U0001F423"
