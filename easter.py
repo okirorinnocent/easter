@@ -1,38 +1,45 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# Replace this URL with your actual background image link
+# 1. Background Image
 BACKGROUND_IMAGE_URL = "https://unsplash.com"
 
-# Note: We removed the 'f' from f''' to prevent Python from parsing the braces
-HTML_TEMPLATE = '''
+# Using hex codes for emojis to avoid Python encoding/SyntaxErrors during deployment
+E_CHICK = "\U0001F423"
+E_TULIP = "\U0001F337"
+E_EGG = "\U0001F95A"
+E_RABBIT = "\U0001F430"
+E_FLOWER = "\U0001F338"
+E_BUTTERFLY = "\U0001F98B"
+E_SPARKLE = "\U00002728"
+E_DAISY = "\U0001F33C"
+E_MOON = "\U0001F319"
+
+HTML_TEMPLATE = """
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://tailwindcss.com"></script>
-    <script src="https://unpkg.com"></script>
-    <script src="https://unpkg.com"></script>
-    <script src="https://unpkg.com"></script>
-    <script src="https://unpkg.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <style>
-        #root { height: 100%; margin: 0; padding: 0; overflow: hidden; }
-        body, html,
+        body, html, #root { height: 100vh; margin: 0; overflow: hidden; background: white; }
     </style>
 </head>
 <body>
     <div id="root"></div>
     <script type="text/babel">
         const { useState, useEffect } = React;
-        const { motion, AnimatePresence } = FramerMotion;
+        const { motion } = FramerMotion;
 
-        const EXPIRATION = new Date(2026, 3, 6, 18, 0);
+        const EXPIRATION = new Date(2026, 3, 6, 18, 0); 
 
         const FloatingEmoji = ({ emoji, delay, x }) => (
             <motion.span
                 className="absolute text-3xl md:text-5xl pointer-events-none select-none"
-                initial={{ y: "100vh", x: `${x}vw`, opacity: 0, rotate: 0 }}
+                initial={{ y: "110vh", x: `${x}vw`, opacity: 0, rotate: 0 }}
                 animate={{ y: "-20vh", opacity: [0, 1, 1, 0], rotate: 360 }}
                 transition={{ duration: 8, delay, repeat: Infinity, ease: "easeOut" }}
                 style={{ left: `${x}%` }}
@@ -42,121 +49,8 @@ HTML_TEMPLATE = '''
         );
 
         const Index = () => {
-            const [expired, setExpired] = useState(false);
             const [timeLeft, setTimeLeft] = useState("");
-import streamlit as st
-import streamlit.components.v1 as components
-
-# 1. Update this to your image URL
-BACKGROUND_IMAGE_URL = "https://unsplash.com"
-
-HTML_TEMPLATE = '''
-<!DOCTYPE html >
-<html >
-<head >
-<script src = "https://tailwindcss.com" > </script >
-<script src = "https://unpkg.com" > </script >
-<script src = "https://unpkg.com" > </script >
-<script src = "https://unpkg.com" > </script >
-<script src = "https://unpkg.com" > </script >
- <style >
-  body, html,  # root { height: 100vh; margin: 0; overflow: hidden; }
-   </style >
-</head >
-<body >
-<div id = "root" > </div >
-<script type = "text/babel" >
-const {useState, useEffect} = React
-const {motion} = FramerMotion
-
-const EXPIRATION = new Date(2026, 3, 6, 18, 0)
-
- const FloatingEmoji = ({emoji, delay, x}) = > (
-      < motion.span
-      className="absolute text-3xl md:text-5xl pointer-events-none select-none"
-      initial={{y: "110vh", x: `${x}vw`, opacity: 0, rotate: 0}}
-      animate={{y: "-20vh", opacity: [0, 1, 1, 0], rotate: 360}}
-      transition={{duration: 8, delay, repeat: Infinity, ease: "easeOut"}}
-      style={{left: `${x} % `}}
-      >
-      {emoji}
-      < /motion.span >
-      )
-
-  const Index = () = > {
-       const[timeLeft, setTimeLeft] = useState("")
-       const[expired, setExpired] = useState(false)
-
-       useEffect(()=> {
-            const tick= () = > {
-                  const now = new Date()
-                  if (now > EXPIRATION) {
-                      setExpired(true)
-                      return
-                      }
-                  const diff = EXPIRATION.getTime() - now.getTime()
-                  const d = Math.floor(diff / 86400000)
-                  const h = Math.floor((diff % 86400000) / 3600000)
-                  const m = Math.floor((diff % 3600000) / 60000)
-                  const s = Math.floor((diff % 60000) / 1000)
-                  setTimeLeft(`${d}d ${h}h ${m}m ${s}s`)
-                  }
-             tick()
-            const id= setInterval(tick, 1000);
-            return ()= > clearInterval(id);
-            }, []);
-
-       const emojis = ["🐣", "🌷", "🥚", "🐰", "🌸", "🦋", "✨", "🌼"];
-       const floaters = emojis.flatMap((e, i)=>
-                                        [0, 1].map((j)=> (
-                                             < FloatingEmoji key={`${i}-${j}`} emoji={e} delay={i * 1.2 + j * 4} x={8 + ((i * 12 + j * 6) % 84)} / >
-                                             ))
-                                        );
-
-       return (
-            < div className="relative h-screen w-full overflow-hidden bg-slate-50" >
-            < div className="absolute inset-0" >
-             < img src="REPLACE_IMAGE_URL" className="w-full h-full object-cover opacity-40" / >
-             < div className="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-white/80" / >
-             < /div >
-
-             < div className="absolute inset-0" > {floaters} < /div >
-
-             < div className="relative z-10 flex h-full items-center justify-center px-4" >
-             < motion.div
-            initial={{y: 20, opacity: 0}}
-            animate={{y: 0, opacity: 1}}
-            className="max-w-md w-full bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-white/20 text-center"
-            >
-             <div className="text-6xl mb-4" > 🐣 < /div >
-             < h1 className="text-4xl font-bold text-gray-800 mb-4" > Happy Easter! < /h1 >
-             < p className="text-gray-600 mb-6" > Wishing you a joyful and blessed season! < /p >
-             < div className="h-px bg-gray-200 w-full mb-6" / >
-             < p className="text-sm text-gray-500 italic" > Best regards, < /p >
-              < p className="text-lg font-bold text-blue-600 mb-6" > Okiror Innocent < /p >
-
-              < div className="bg-blue-50 p-3 rounded-xl" >
-             < p className="text-xs text-blue-400 uppercase" > Expires in </p >
-             < p className="text-xl font-mono font-bold text-blue-600" > {timeLeft} < /p >
-              < / div >
-             < / motion.div >
-             < / div >
-             < / div >
-            );
-       };
-
-   const root = ReactDOM.createRoot(document.getElementById('root'))
-        root.render(< Index / >);
-    </script >
-</body >
-</html >
-'''.replace("REPLACE_IMAGE_URL", BACKGROUND_IMAGE_URL)
-
-# Streamlit App
-st.set_page_config(page_title="Easter Greeting", layout="wide")
-
-# This forces the component to take up the full screen height
-components.html(HTML_TEMPLATE, height=800)
+            const [expired, setExpired] = useState(false);
 
             useEffect(() => {
                 const tick = () => {
@@ -177,7 +71,7 @@ components.html(HTML_TEMPLATE, height=800)
                 return () => clearInterval(id);
             }, []);
 
-            const emojis = ["🐣", "🌷", "🥚", "🐰", "🌸", "🦋", "✨", "🌼"];
+            const emojis = ["CHICK", "TULIP", "EGG", "RABBIT", "FLOWER", "BUTTERFLY", "SPARKLE", "DAISY"];
             const floaters = emojis.flatMap((e, i) =>
                 [0, 1].map((j) => (
                     <FloatingEmoji key={`${i}-${j}`} emoji={e} delay={i * 1.2 + j * 4} x={8 + ((i * 12 + j * 6) % 84)} />
@@ -188,36 +82,39 @@ components.html(HTML_TEMPLATE, height=800)
                 return (
                     <div className="flex min-h-screen items-center justify-center bg-gray-100">
                         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center p-12 rounded-2xl bg-white shadow-lg">
-                            <p className="text-6xl mb-4">🌙</p>
+                            <p className="text-6xl mb-4">MOON</p>
                             <h1 className="text-2xl font-bold text-gray-800 mb-2">This Easter greeting has expired.</h1>
-                            <p className="text-gray-500">See you next year! 🐣</p>
+                            <p className="text-gray-500">See you next year! CHICK</p>
                         </motion.div>
                     </div>
                 );
             }
 
             return (
-                <div className="relative min-h-screen overflow-hidden bg-white">
+                <div className="relative h-screen w-full overflow-hidden bg-slate-50">
                     <div className="absolute inset-0">
-                        <img src="REPLACE_IMAGE_URL" alt="" className="w-full h-full object-cover opacity-40" />
+                        <img src="BG_URL" className="w-full h-full object-cover opacity-40" />
                         <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-white/80" />
                     </div>
-                    <div className="absolute inset-0 overflow-hidden">{floaters}</div>
-                    <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12">
-                        <motion.div initial={{ y: 40, opacity: 0, scale: 0.95 }} animate={{ y: 0, opacity: 1, scale: 1 }} transition={{ duration: 0.8, ease: "easeOut" }} className="max-w-xl w-full">
-                            <div className="rounded-3xl bg-white/80 backdrop-blur-xl p-8 md:p-12 shadow-2xl border border-gray-200 text-center">
-                                <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="text-7xl md:text-8xl mb-6">🐣</motion.div>
-                                <motion.h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4" style={{ fontFamily: "'Georgia', serif" }}>Happy Easter! 🌷</motion.h1>
-                                <div className="space-y-4">
-                                    <p className="text-lg md:text-xl text-gray-800 leading-relaxed">Wishing you a joyful and blessed Easter season filled with love, hope, and happiness!</p>
-                                    <div className="h-px bg-gray-200 my-6" />
-                                    <p className="text-gray-500 text-sm italic">Best regards,</p>
-                                    <p className="text-xl font-semibold text-blue-600">Okiror Innocent</p>
-                                </div>
-                                <div className="mt-8 py-3 px-5 rounded-xl bg-blue-50 inline-block">
-                                    <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Greeting expires in</p>
-                                    <p className="text-lg font-mono font-bold text-blue-600">{timeLeft}</p>
-                                </div>
+                    
+                    <div className="absolute inset-0">{floaters}</div>
+
+                    <div className="relative z-10 flex h-full items-center justify-center px-4">
+                        <motion.div 
+                            initial={{ y: 20, opacity: 0 }} 
+                            animate={{ y: 0, opacity: 1 }}
+                            className="max-w-md w-full bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-white/20 text-center"
+                        >
+                            <div className="text-6xl mb-4">CHICK</div>
+                            <h1 className="text-4xl font-bold text-gray-800 mb-4">Happy Easter! TULIP</h1>
+                            <p className="text-gray-600 mb-6">Wishing you a joyful and blessed season!</p>
+                            <div className="h-px bg-gray-200 w-full mb-6" />
+                            <p className="text-sm text-gray-500 italic">Best regards,</p>
+                            <p className="text-lg font-bold text-blue-600 mb-6">Okiror Innocent</p>
+                            
+                            <div className="bg-blue-50 p-3 rounded-xl">
+                                <p className="text-xs text-blue-400 uppercase">Expires in</p>
+                                <p className="text-xl font-mono font-bold text-blue-600">{timeLeft}</p>
                             </div>
                         </motion.div>
                     </div>
@@ -230,14 +127,19 @@ components.html(HTML_TEMPLATE, height=800)
     </script>
 </body>
 </html>
-'''.replace("REPLACE_IMAGE_URL", BACKGROUND_IMAGE_URL)
+"""
 
-# Streamlit setup
+# Replace markers with emojis and background URL to avoid Python-level SyntaxErrors
+final_html = HTML_TEMPLATE.replace("BG_URL", BACKGROUND_IMAGE_URL)
+final_html = final_html.replace("CHICK", E_CHICK)
+final_html = final_html.replace("TULIP", E_TULIP)
+final_html = final_html.replace("EGG", E_EGG)
+final_html = final_html.replace("RABBIT", E_RABBIT)
+final_html = final_html.replace("FLOWER", E_FLOWER)
+final_html = final_html.replace("BUTTERFLY", E_BUTTERFLY)
+final_html = final_html.replace("SPARKLE", E_SPARKLE)
+final_html = final_html.replace("DAISY", E_DAISY)
+final_html = final_html.replace("MOON", E_MOON)
+
 st.set_page_config(page_title="Easter Greeting", layout="wide")
-
-# Hide Streamlit UI elements for a cleaner look
-st.markdown(
-    "<style>#MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}</style>", unsafe_allow_html=True)
-
-# Render the component
-components.html(HTML_TEMPLATE, height=1000, scrolling=False)
+components.html(final_html, height=800)
