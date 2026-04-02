@@ -17,7 +17,8 @@ HTML_TEMPLATE = '''
     <script src="https://unpkg.com"></script>
     <script src="https://unpkg.com"></script>
     <style>
-        body, html, #root { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+        #root { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+        body, html,
     </style>
 </head>
 <body>
@@ -26,7 +27,7 @@ HTML_TEMPLATE = '''
         const { useState, useEffect } = React;
         const { motion, AnimatePresence } = FramerMotion;
 
-        const EXPIRATION = new Date(2026, 3, 6, 18, 0); 
+        const EXPIRATION = new Date(2026, 3, 6, 18, 0);
 
         const FloatingEmoji = ({ emoji, delay, x }) => (
             <motion.span
@@ -43,6 +44,119 @@ HTML_TEMPLATE = '''
         const Index = () => {
             const [expired, setExpired] = useState(false);
             const [timeLeft, setTimeLeft] = useState("");
+import streamlit as st
+import streamlit.components.v1 as components
+
+# 1. Update this to your image URL
+BACKGROUND_IMAGE_URL = "https://unsplash.com"
+
+HTML_TEMPLATE = '''
+<!DOCTYPE html >
+<html >
+<head >
+<script src = "https://tailwindcss.com" > </script >
+<script src = "https://unpkg.com" > </script >
+<script src = "https://unpkg.com" > </script >
+<script src = "https://unpkg.com" > </script >
+<script src = "https://unpkg.com" > </script >
+ <style >
+  body, html,  # root { height: 100vh; margin: 0; overflow: hidden; }
+   </style >
+</head >
+<body >
+<div id = "root" > </div >
+<script type = "text/babel" >
+const {useState, useEffect} = React
+const {motion} = FramerMotion
+
+const EXPIRATION = new Date(2026, 3, 6, 18, 0)
+
+ const FloatingEmoji = ({emoji, delay, x}) = > (
+      < motion.span
+      className="absolute text-3xl md:text-5xl pointer-events-none select-none"
+      initial={{y: "110vh", x: `${x}vw`, opacity: 0, rotate: 0}}
+      animate={{y: "-20vh", opacity: [0, 1, 1, 0], rotate: 360}}
+      transition={{duration: 8, delay, repeat: Infinity, ease: "easeOut"}}
+      style={{left: `${x} % `}}
+      >
+      {emoji}
+      < /motion.span >
+      )
+
+  const Index = () = > {
+       const[timeLeft, setTimeLeft] = useState("")
+       const[expired, setExpired] = useState(false)
+
+       useEffect(()=> {
+            const tick= () = > {
+                  const now = new Date()
+                  if (now > EXPIRATION) {
+                      setExpired(true)
+                      return
+                      }
+                  const diff = EXPIRATION.getTime() - now.getTime()
+                  const d = Math.floor(diff / 86400000)
+                  const h = Math.floor((diff % 86400000) / 3600000)
+                  const m = Math.floor((diff % 3600000) / 60000)
+                  const s = Math.floor((diff % 60000) / 1000)
+                  setTimeLeft(`${d}d ${h}h ${m}m ${s}s`)
+                  }
+             tick()
+            const id= setInterval(tick, 1000);
+            return ()= > clearInterval(id);
+            }, []);
+
+       const emojis = ["🐣", "🌷", "🥚", "🐰", "🌸", "🦋", "✨", "🌼"];
+       const floaters = emojis.flatMap((e, i)=>
+                                        [0, 1].map((j)=> (
+                                             < FloatingEmoji key={`${i}-${j}`} emoji={e} delay={i * 1.2 + j * 4} x={8 + ((i * 12 + j * 6) % 84)} / >
+                                             ))
+                                        );
+
+       return (
+            < div className="relative h-screen w-full overflow-hidden bg-slate-50" >
+            < div className="absolute inset-0" >
+             < img src="REPLACE_IMAGE_URL" className="w-full h-full object-cover opacity-40" / >
+             < div className="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-white/80" / >
+             < /div >
+
+             < div className="absolute inset-0" > {floaters} < /div >
+
+             < div className="relative z-10 flex h-full items-center justify-center px-4" >
+             < motion.div
+            initial={{y: 20, opacity: 0}}
+            animate={{y: 0, opacity: 1}}
+            className="max-w-md w-full bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-white/20 text-center"
+            >
+             <div className="text-6xl mb-4" > 🐣 < /div >
+             < h1 className="text-4xl font-bold text-gray-800 mb-4" > Happy Easter! < /h1 >
+             < p className="text-gray-600 mb-6" > Wishing you a joyful and blessed season! < /p >
+             < div className="h-px bg-gray-200 w-full mb-6" / >
+             < p className="text-sm text-gray-500 italic" > Best regards, < /p >
+              < p className="text-lg font-bold text-blue-600 mb-6" > Okiror Innocent < /p >
+
+              < div className="bg-blue-50 p-3 rounded-xl" >
+             < p className="text-xs text-blue-400 uppercase" > Expires in </p >
+             < p className="text-xl font-mono font-bold text-blue-600" > {timeLeft} < /p >
+              < / div >
+             < / motion.div >
+             < / div >
+             < / div >
+            );
+       };
+
+   const root = ReactDOM.createRoot(document.getElementById('root'))
+        root.render(< Index / >);
+    </script >
+</body >
+</html >
+'''.replace("REPLACE_IMAGE_URL", BACKGROUND_IMAGE_URL)
+
+# Streamlit App
+st.set_page_config(page_title="Easter Greeting", layout="wide")
+
+# This forces the component to take up the full screen height
+components.html(HTML_TEMPLATE, height=800)
 
             useEffect(() => {
                 const tick = () => {
