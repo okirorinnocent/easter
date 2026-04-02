@@ -1,112 +1,128 @@
 import streamlit as st
 import streamlit.components.v1 as components
-import base64
-import os
 
-# 1. Provide the name of your image file here
-# Make sure this file is in the SAME folder as your easter.py
-IMAGE_FILENAME = "easter-bg.jpg"
+# 1. USE A PUBLIC IMAGE URL FOR MAXIMUM RELIABILITY
+# Replace this with your own public link (must start with https://)
+MY_IMAGE_URL = "https://github.com/okirorinnocent/easter/blob/main/easter-bg.jpg"
 
-
-def get_base64_image(image_path):
-    if os.path.exists(image_path):
-        with open(image_path, "rb") as img_file:
-            return f"data:image/jpeg;base64,{base64.b64encode(img_file.read()).decode()}"
-    return ""
-
-
-# Convert your local image to a string
-img_base64 = get_base64_image(IMAGE_FILENAME)
-
-# Unicode Emojis
+# Emoji Unicode
 E_CHICK = "\U0001F423"
 E_TULIP = "\U0001F337"
 
-HTML_CODE = f"""
+HTML_CODE = """
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <script src="https://tailwindcss.com"></script>
     <style>
-        body, html {{ height: 100vh; margin: 0; overflow: hidden; font-family: 'Georgia', serif; background-color: #f8fafc; }}
+        body, html { height: 100vh; margin: 0; overflow: hidden; font-family: 'Georgia', serif; }
         
-        .bg-img {{ 
+        /* Background Image - 100% Visibility */
+        .bg-img { 
             position: fixed; 
             top: 0; left: 0;
             width: 100vw; height: 100vh; 
             object-fit: cover; 
-            opacity: 0.9; /* High visibility */
-            z-index: -2;
-        }}
-        
-        .overlay {{ 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0, 0, 0, 0.15); 
             z-index: -1;
-        }}
-
-        .card {{ 
+            filter: brightness(1); /* No darkening */
+        }
+        
+        /* Soft semi-transparent card to keep text readable */
+        .card { 
             position: relative; 
             z-index: 20; 
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px); 
-            padding: 3rem 2rem; 
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px); 
+            padding: 3.5rem 2rem; 
             border-radius: 2.5rem; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3); 
             text-align: center; 
-            max-width: 500px; 
+            max-width: 550px; 
             width: 90%; 
-            border: 2px solid rgba(255,255,255,0.5); 
-        }}
+            border: 1px solid rgba(255,255,255,0.4); 
+        }
 
-        .main-emoji {{ animation: bounce 3s ease-in-out infinite; font-size: 5rem; display: inline-block; }}
-        @keyframes bounce {{ 0%, 100% {{ transform: translateY(0); }} 50% {{ transform: translateY(-20px); }} }}
-        .floating-bg {{ position: absolute; font-size: 2rem; z-index: 10; animation: rise 8s linear infinite; }}
-        @keyframes rise {{ from {{ transform: translateY(110vh) rotate(0deg); opacity: 0; }} 20% {{ opacity: 1; }} to {{ transform: translateY(-20vh) rotate(360deg); opacity: 0; }} }}
+        .main-emoji { 
+            animation: bounce 3s ease-in-out infinite; 
+            font-size: 6rem; 
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes bounce { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-30px); } 
+        }
+
+        /* Floating background emojis */
+        .floating-bg { 
+            position: absolute; 
+            font-size: 2rem; 
+            z-index: 5; 
+            animation: rise 10s linear infinite; 
+            pointer-events: none;
+        }
+
+        @keyframes rise { 
+            from { transform: translateY(110vh) rotate(0deg); opacity: 0; } 
+            20% { opacity: 0.8; } 
+            80% { opacity: 0.8; }
+            to { transform: translateY(-20vh) rotate(360deg); opacity: 0; } 
+        }
     </style>
 </head>
 <body class="flex items-center justify-center">
-    <img src="{img_base64}" class="bg-img">
-    <div class="overlay"></div>
+    <img src="IMAGE_URL_PLACEHOLDER" class="bg-img" alt="Background">
+    
     <div id="emoji-container"></div>
 
     <div class="card">
-        <div class="main-emoji">{E_CHICK}</div>
-        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Happy Easter! {E_TULIP}</h1>
-        <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
+        <div class="main-emoji">CHICK</div>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6">
+            Happy Easter! TULIP
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-800 leading-relaxed mb-8">
             Wishing you a joyful and blessed Easter season filled with love, hope, and happiness!
         </p>
-        <div class="h-px bg-gray-200 w-full mb-6"></div>
-        <p class="text-gray-400 text-xs uppercase tracking-widest mb-1">Best regards</p>
+        
+        <div class="h-px bg-gray-300 w-full mb-8"></div>
+        
+        <p class="text-gray-500 text-sm italic mb-1">Best regards,</p>
         <p class="text-3xl font-bold text-blue-600">Okiror Innocent</p>
     </div>
 
     <script>
         const container = document.getElementById('emoji-container');
         const emojis = ['🐣', '🌷', '🥚', '🐰', '🌸', '🦋', '✨', '🌼'];
-        function createEmoji() {{
+        function createEmoji() {
             const el = document.createElement('div');
             el.className = 'floating-bg';
             el.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
             el.style.left = Math.random() * 100 + 'vw';
-            el.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            el.style.animationDuration = (Math.random() * 5 + 7) + 's';
             container.appendChild(el);
-            setTimeout(() => el.remove(), 9000);
-        }}
+            setTimeout(() => el.remove(), 12000);
+        }
         setInterval(createEmoji, 1500);
     </script>
 </body>
 </html>
 """
 
+# Final preparation
+final_html = HTML_CODE.replace("IMAGE_URL_PLACEHOLDER", MY_IMAGE_URL)
+final_html = final_html.replace("CHICK", E_CHICK).replace("TULIP", E_TULIP)
+
 st.set_page_config(page_title="Happy Easter!", layout="wide")
-st.markdown(
-    "<style>header, footer, #MainMenu {visibility: hidden;} .block-container {padding:0;}</style>", unsafe_allow_html=True)
 
-# If the image failed to load, show a warning
-if not img_base64:
-    st.error(f"Image file '{IMAGE_FILENAME}' not found in the directory.")
+# Force Streamlit to be invisible for a clean link view
+st.markdown("""
+    <style>
+        header, footer, #MainMenu {visibility: hidden;}
+        .block-container {padding: 0 !important;}
+        iframe {border: none; width: 100%; height: 100vh;}
+    </style>
+""", unsafe_allow_html=True)
 
-components.html(HTML_CODE, height=1000)
+components.html(final_html, height=1000, scrolling=False)
