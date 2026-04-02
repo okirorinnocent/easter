@@ -4,7 +4,7 @@ import requests
 import base64
 
 # 1. FIXED RAW URL: Points to the actual data, not the GitHub page
-RAW_IMAGE_URL = "https://githubusercontent.com"
+RAW_IMAGE_URL = "https://github.com/okirorinnocent/easter/blob/main/easter-bg.jpg"
 
 
 def get_base64_from_url(url):
