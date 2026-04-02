@@ -1,9 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# 1. USE A PUBLIC IMAGE URL FOR MAXIMUM RELIABILITY
-# Replace this with your own public link (must start with https://)
-MY_IMAGE_URL = "https://github.com/okirorinnocent/easter/blob/main/easter-bg.jpg"
+# 1. FIXED IMAGE URL: Points directly to the raw file
+MY_IMAGE_URL = "https://githubusercontent.com"
 
 # Emoji Unicode
 E_CHICK = "\U0001F423"
@@ -14,29 +13,29 @@ HTML_CODE = """
 <html>
 <head>
     <meta charset="UTF-8">
-    <script src="https://tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body, html { height: 100vh; margin: 0; overflow: hidden; font-family: 'Georgia', serif; }
+        body, html { height: 100vh; margin: 0; padding: 0; overflow: hidden; font-family: 'Georgia', serif; }
         
-        /* Background Image - 100% Visibility */
+        /* Background Image - Full Clarity */
         .bg-img { 
             position: fixed; 
             top: 0; left: 0;
             width: 100vw; height: 100vh; 
             object-fit: cover; 
             z-index: -1;
-            filter: brightness(1); /* No darkening */
+            filter: brightness(1);
         }
         
-        /* Soft semi-transparent card to keep text readable */
+        /* Transparent card */
         .card { 
             position: relative; 
             z-index: 20; 
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(10px); 
             padding: 3.5rem 2rem; 
             border-radius: 2.5rem; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4); 
             text-align: center; 
             max-width: 550px; 
             width: 90%; 
@@ -55,7 +54,6 @@ HTML_CODE = """
             50% { transform: translateY(-30px); } 
         }
 
-        /* Floating background emojis */
         .floating-bg { 
             position: absolute; 
             font-size: 2rem; 
@@ -110,18 +108,16 @@ HTML_CODE = """
 </html>
 """
 
-# Final preparation
-final_html = HTML_CODE.replace("IMAGE_URL_PLACEHOLDER", MY_IMAGE_URL)
-final_html = final_html.replace("CHICK", E_CHICK).replace("TULIP", E_TULIP)
+final_html = HTML_CODE.replace("IMAGE_URL_PLACEHOLDER", MY_IMAGE_URL).replace(
+    "CHICK", E_CHICK).replace("TULIP", E_TULIP)
 
 st.set_page_config(page_title="Happy Easter!", layout="wide")
 
-# Force Streamlit to be invisible for a clean link view
 st.markdown("""
     <style>
         header, footer, #MainMenu {visibility: hidden;}
         .block-container {padding: 0 !important;}
-        iframe {border: none; width: 100%; height: 100vh;}
+        iframe {border: none; width: 100vw; height: 100vh;}
     </style>
 """, unsafe_allow_html=True)
 
